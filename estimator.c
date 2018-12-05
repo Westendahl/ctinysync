@@ -63,7 +63,7 @@ tinysync_est_ret_t tinysync_est_etimate(tinysync_est_state_t * state, const tiny
         } else {
             // Lower constraint useful: update b_2
             b_2 = b_3;
-            if ( (!tinysync_constraint_t_compare(a_1,a_2)) && (b_3.t_1 > state->lineset.aa.b + state->lineset.aa.a * (float)(b_3.t_2)) ){ //TODO do not read a_1,a_2
+            if ( (!tinysync_constraint_t_compare(state->constraints.a_1,state->constraints.a_2)) && (b_3.t_1 > state->lineset.aa.b + state->lineset.aa.a * (float)(b_3.t_2)) ){
                 // a_2 is better than a_1 for this lower constraint: update a_1
                 a_1 = state->constraints.a_2;
             }
@@ -83,7 +83,7 @@ tinysync_est_ret_t tinysync_est_etimate(tinysync_est_state_t * state, const tiny
         } else {
             // Upper constraint useful: update a_2
             a_2 = a_3;
-            if ( (!tinysync_constraint_t_compare(b_1,b_2)) && (a_3.t_1 < state->lineset.bb.b + state->lineset.bb.a * (float)(a_3.t_2)) ){
+            if ( (!tinysync_constraint_t_compare(state->constraints.b_1,state->constraints.b_2)) && (a_3.t_1 < state->lineset.bb.b + state->lineset.bb.a * (float)(a_3.t_2)) ){
                 // b_2 is better than b_1 for this upper constraint: update b_1
                 b_1 = state->constraints.b_2;
             }
