@@ -12,14 +12,14 @@ typedef enum tinysync_est_ret_t{
 } tinysync_est_ret_t;
 
 typedef struct tinysync_datapoint_t{
-    uint32_t t_o; // t_1 when probe was sent (+ minimum known delay until response transmission)
-    uint32_t t_b; // t_2 when response was sent
-    uint32_t t_r; // t_1 when response was received
+    uint64_t t_o; // t_1 when probe was sent (+ minimum known delay until response transmission)
+    uint64_t t_b; // t_2 when response was sent
+    uint64_t t_r; // t_1 when response was received
 } tinysync_datapoint_t;
 
 typedef struct tinysync_constraint_t{
-    uint32_t t_1; // prober clock time
-    uint32_t t_2; // responder clock time
+    uint64_t t_1; // prober clock time
+    uint64_t t_2; // responder clock time
 } tinysync_constraint_t;
 
 typedef struct tinysync_constraints_t{
@@ -31,8 +31,8 @@ typedef struct tinysync_constraints_t{
 
 // Stores a line t_1 = a(t_2) + b
 typedef struct tinysync_line_t{
-    float a; // slope of line
-    float b; // offset of line
+    double a; // slope of line
+    double b; // offset of line
 } tinysync_line_t;
 
 // Stores the set of 4 interesting lines between 4 points
