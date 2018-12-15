@@ -5,21 +5,21 @@
 #include <stdlib.h>
 #include <math.h>
 
-#define S 1000000
-#define MS 1000
+#define S 1000000L
+#define MS 1000L
 
-#define TEST_N 10000 // number of iterations to run test
-#define TEST_A12 1.5
-#define TEST_B12 5*S
+#define TEST_N 10000L // number of iterations to run test
+#define TEST_A12 1.4
+#define TEST_B12 5L*S
 #define TEST_INTERVAL 1*S // Test interval, t_2 units
 #define TEST_INTERVAL_RAND 100*MS // error magnitude
 #define TEST_DELAY_B 50*MS // delay from t_o to t_b
-#define TEST_DELAY_B_RAND 30*MS // error magnitude
+#define TEST_DELAY_B_RAND 15*MS // error magnitude
 #define TEST_DELAY_R 50*MS // delay from t_b to t_r
-#define TEST_DELAY_R_RAND 30*MS // error magnitude
+#define TEST_DELAY_R_RAND 15*MS // error magnitude
 
-#define TEST_NONLINEAR_T_2 500*S // Time of nonlinearity event
-#define TEST_NONLINEAR_A12 1.4 // new A12 after nonlinearity
+#define TEST_NONLINEAR_T_2_START 500*S // Time of nonlinearity event
+#define TEST_NONLINEAR_A12         1.6 // new A12 after nonlinearity
 
 // Generate a random (uniform) number with a maximum magnitude of 'range'
 int64_t random_error(uint64_t range){
@@ -40,8 +40,8 @@ typedef struct test_moment_t{
 
 void test_advance_timestamp(tinysync_datapoint_t* d, test_moment_t* now){
     
-    double test_a12 = (now->t_2 < TEST_NONLINEAR_T_2) ? TEST_A12 : 
-                                                      TEST_NONLINEAR_A12;
+    double test_a12 = (now->t_2 < TEST_NONLINEAR_T_2_START) ? TEST_A12 : 
+                                                                 TEST_NONLINEAR_A12;
 
     int64_t error = random_error(TEST_INTERVAL_RAND);
     now->t_1 += (TEST_INTERVAL + error) * test_a12;
@@ -73,8 +73,8 @@ int main(){
         double a_12_exp = (state.lineset.ab.a + state.lineset.ba.a) / 2.0;
         double b_12_exp = (state.lineset.ab.b + state.lineset.ba.b) / 2.0;
         uint64_t estimated_t_2 = (uint64_t)( (((double)now.t_1) - b_12_exp) / a_12_exp );
-        uint64_t min_t_2 = (uint64_t)( (((double)now.t_1) - state.lineset.ab.b) / state.lineset.ba.a );
-        uint64_t max_t_2 = (uint64_t)( (((double)now.t_1) - state.lineset.ba.b) / state.lineset.ab.a );
+        uint64_t max_t_2 = (uint64_t)( (((double)now.t_1) - state.lineset.ab.b) / state.lineset.ab.a );
+        uint64_t min_t_2 = (uint64_t)( (((double)now.t_1) - state.lineset.ba.b) / state.lineset.ba.a );
         printf("test %u %.9g %.9g %.9g %.9g %u %.9g %.9g %.9g %.9g %u %d %f %d %d %d\n",
                                        ret, //D
                                        state.lineset.ab.a, // drift lower limit
@@ -83,8 +83,8 @@ int main(){
                                        state.lineset.ba.b, // offset lower limit
                                        
                                        now.t_2,
-                                       
-                                       a_12_exp, //I
+
+                                       a_12_exp, //J
                                        fabs(a_12_exp - TEST_A12), // A12 absolute error
                                        b_12_exp,
                                        fabs(b_12_exp - TEST_B12), // B12 absolute error
