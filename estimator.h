@@ -23,10 +23,10 @@ typedef struct tinysync_constraint_t{
 } tinysync_constraint_t;
 
 typedef struct tinysync_constraints_t{
-    tinysync_constraint_t a_1;
-    tinysync_constraint_t a_2;
     tinysync_constraint_t b_1;
     tinysync_constraint_t b_2;
+    tinysync_constraint_t a_1;
+    tinysync_constraint_t a_2;
 } tinysync_constraints_t;
 
 // Stores a line t_1 = a(t_2) + b
@@ -37,8 +37,8 @@ typedef struct tinysync_line_t{
 
 // Stores the set of 4 interesting lines between 4 points
 typedef struct tinysync_lineset_t{
-    tinysync_line_t ab;
     tinysync_line_t ba;
+    tinysync_line_t ab;
     tinysync_line_t aa;
     tinysync_line_t bb;
 } tinysync_lineset_t;

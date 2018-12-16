@@ -14,7 +14,7 @@
 #define TEST_INTERVAL 1*S // Test interval, t_2 units
 #define TEST_INTERVAL_RAND 100*MS // error magnitude
 #define TEST_DELAY_B 50*MS // delay from t_o to t_b
-#define TEST_DELAY_B_RAND 15*MS // error magnitude
+#define TEST_DELAY_a_RAND 15*MS // error magnitude
 #define TEST_DELAY_R 50*MS // delay from t_b to t_r
 #define TEST_DELAY_R_RAND 15*MS // error magnitude
 
@@ -48,7 +48,7 @@ void test_advance_timestamp(tinysync_datapoint_t* d, test_moment_t* now){
     now->t_2 += (TEST_INTERVAL + error);
     d->t_o = now->t_1;
 
-    error = random_error(TEST_DELAY_B_RAND);
+    error = random_error(TEST_DELAY_a_RAND);
     now->t_1 += (TEST_DELAY_B + error) * test_a12;
     now->t_2 += (TEST_DELAY_B + error);
     d->t_b = now->t_2;
@@ -70,24 +70,24 @@ int main(){
     for(uint64_t i=0; i<TEST_N; i++){
         test_advance_timestamp(&d1, &now);
         tinysync_est_ret_t ret = tinysync_est_etimate(&state, &d1);
-        double a_12_exp = (state.lineset.ab.a + state.lineset.ba.a) / 2.0;
-        double b_12_exp = (state.lineset.ab.b + state.lineset.ba.b) / 2.0;
-        uint64_t estimated_t_2 = (uint64_t)( (((double)now.t_1) - b_12_exp) / a_12_exp );
-        uint64_t max_t_2 = (uint64_t)( (((double)now.t_1) - state.lineset.ab.b) / state.lineset.ab.a );
-        uint64_t min_t_2 = (uint64_t)( (((double)now.t_1) - state.lineset.ba.b) / state.lineset.ba.a );
+        double b_12_exp = (state.lineset.ba.a + state.lineset.ab.a) / 2.0;
+        double a_12_exp = (state.lineset.ba.b + state.lineset.ab.b) / 2.0;
+        uint64_t estimated_t_2 = (uint64_t)( (((double)now.t_1) - a_12_exp) / b_12_exp );
+        uint64_t max_t_2 = (uint64_t)( (((double)now.t_1) - state.lineset.ba.b) / state.lineset.ba.a );
+        uint64_t min_t_2 = (uint64_t)( (((double)now.t_1) - state.lineset.ab.b) / state.lineset.ab.a );
         printf("test %u %.9g %.9g %.9g %.9g %u %.9g %.9g %.9g %.9g %u %d %f %d %d %d\n",
                                        ret, //D
-                                       state.lineset.ab.a, // drift lower limit
-                                       state.lineset.ba.a, // drift upper limit
-                                       state.lineset.ab.b, // offset upper limit
-                                       state.lineset.ba.b, // offset lower limit
+                                       state.lineset.ba.a, // drift lower limit
+                                       state.lineset.ab.a, // drift upper limit
+                                       state.lineset.ba.b, // offset upper limit
+                                       state.lineset.ab.b, // offset lower limit
                                        
                                        now.t_2,
 
-                                       a_12_exp, //J
-                                       fabs(a_12_exp - TEST_A12), // A12 absolute error
-                                       b_12_exp,
-                                       fabs(b_12_exp - TEST_B12), // B12 absolute error
+                                       b_12_exp, //J
+                                       fabs(b_12_exp - TEST_A12), // A12 absolute error
+                                       a_12_exp,
+                                       fabs(a_12_exp - TEST_B12), // B12 absolute error
                                        
                                        estimated_t_2,
                                        estimated_t_2 - now.t_2, // 
@@ -103,27 +103,27 @@ int main(){
     d1.t_r = 3;
     tinysync_est_ret_t ret = tinysync_est_etimate(&state, &d1);
     
-    printf("tiny sync test:%u %f %f %f %f\n",ret, state.lineset.ab.a, state.lineset.ba.a, state.lineset.ab.b, state.lineset.ba.b);
+    printf("tiny sync test:%u %f %f %f %f\n",ret, state.lineset.ba.a, state.lineset.ab.a, state.lineset.ba.b, state.lineset.ab.b);
     d1.t_o = 4;
     d1.t_b = 5;
     d1.t_r = 6;
     ret = tinysync_est_etimate(&state, &d1);
-    printf("tiny sync test:%u %f %f %f %f\n",ret, state.lineset.ab.a, state.lineset.ba.a, state.lineset.ab.b, state.lineset.ba.b);
+    printf("tiny sync test:%u %f %f %f %f\n",ret, state.lineset.ba.a, state.lineset.ab.a, state.lineset.ba.b, state.lineset.ab.b);
     d1.t_o = 7;
     d1.t_b = 8;
     d1.t_r = 9;
     ret = tinysync_est_etimate(&state, &d1);
-    printf("tiny sync test:%u %f %f %f %f\n",ret, state.lineset.ab.a, state.lineset.ba.a, state.lineset.ab.b, state.lineset.ba.b);
+    printf("tiny sync test:%u %f %f %f %f\n",ret, state.lineset.ba.a, state.lineset.ab.a, state.lineset.ba.b, state.lineset.ab.b);
     d1.t_o = 10;
     d1.t_b = 11;
     d1.t_r = 12;
     ret = tinysync_est_etimate(&state, &d1);
-    printf("tiny sync test:%u %f %f %f %f\n",ret, state.lineset.ab.a, state.lineset.ba.a, state.lineset.ab.b, state.lineset.ba.b);
+    printf("tiny sync test:%u %f %f %f %f\n",ret, state.lineset.ba.a, state.lineset.ab.a, state.lineset.ba.b, state.lineset.ab.b);
     d1.t_o = 13;
     d1.t_b = 14;
     d1.t_r = 15;
     ret = tinysync_est_etimate(&state, &d1);
-    printf("tiny sync test:%u %f %f %f %f\n",ret, state.lineset.ab.a, state.lineset.ba.a, state.lineset.ab.b, state.lineset.ba.b);
+    printf("tiny sync test:%u %f %f %f %f\n",ret, state.lineset.ba.a, state.lineset.ab.a, state.lineset.ba.b, state.lineset.ab.b);
     */
     //while(1){}
 
