@@ -22,25 +22,26 @@ typedef struct tinysync_constraint_t{
     uint64_t t_2; // responder clock time
 } tinysync_constraint_t;
 
-typedef struct tinysync_constraints_t{
-    tinysync_constraint_t b_1;
-    tinysync_constraint_t b_2;
-    tinysync_constraint_t a_1;
-    tinysync_constraint_t a_2;
-} tinysync_constraints_t;
-
-// Stores a line t_1 = a(t_2) + b
+// Line t_1 = a(t_2) + b
 typedef struct tinysync_line_t{
     double a; // slope of line
     double b; // offset of line
 } tinysync_line_t;
 
-// Stores the set of 4 interesting lines between 4 points
+// Stored set of constraints
+typedef struct tinysync_constraints_t{
+    tinysync_constraint_t b_1; // Constraint B_1
+    tinysync_constraint_t b_2; // Constraint B_1
+    tinysync_constraint_t a_1; // Constraint A_1
+    tinysync_constraint_t a_2; // Constraint A_1
+} tinysync_constraints_t;
+
+// Stored set of 4 lines between 4 constraints
 typedef struct tinysync_lineset_t{
-    tinysync_line_t ba;
-    tinysync_line_t ab;
-    tinysync_line_t aa;
-    tinysync_line_t bb;
+    tinysync_line_t ba; // Line B_1 A_2
+    tinysync_line_t ab; // Line A_1 B_2
+    tinysync_line_t aa; // Line A_1 A_2
+    tinysync_line_t bb; // Line B_1 B_2
 } tinysync_lineset_t;
 
 typedef struct tinysync_est_state_t{
