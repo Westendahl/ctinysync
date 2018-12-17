@@ -1,0 +1,13 @@
+#define S 1000000L // Factor for seconds
+#define MS 1000L // Factor for milliseconds
+#define TEST_N 10000L // number of iterations to run test
+#define TEST_A12 1.4 // Clock skew
+#define TEST_B12 5L*S // Clock offset
+#define TEST_INTERVAL 1*S // Test interval, t_2 units
+#define TEST_INTERVAL_RAND 100*MS // error magnitude of same
+#define TEST_DELAY_B 50*MS // delay from t_o to t_b
+#define TEST_DELAY_B_RAND 15*MS // error magnitude of same
+#define TEST_DELAY_R 50*MS // delay from t_b to t_r
+#define TEST_DELAY_R_RAND 15*MS // error magnitude of same
+#define TEST_NONLINEAR_T_2_START 500*S // Time of nonlinearity event
+#define TEST_NONLINEAR_A12 1.6 // new A12 after nonlinearity

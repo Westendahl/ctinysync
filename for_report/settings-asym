@@ -1,3 +1,5 @@
+#define S 1000000L
+#define MS 1000L
 #define TEST_N 10000L // number of iterations to run test
 #define TEST_A12 1.4
 #define TEST_B12 5L*S
