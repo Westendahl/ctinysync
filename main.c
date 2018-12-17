@@ -38,7 +38,6 @@ typedef struct test_moment_t{
 } test_moment_t;
 
 void test_advance_timestamp(tinysync_datapoint_t* d, test_moment_t* now){
-    
     double test_a12 = (now->t_2 < TEST_NONLINEAR_T_2_START) ? TEST_A12 : 
                                                                  TEST_NONLINEAR_A12;
 
@@ -60,9 +59,9 @@ void test_advance_timestamp(tinysync_datapoint_t* d, test_moment_t* now){
 
 int main(){
     tinysync_est_state_t state;
-    tinysync_est_state_t_initialize(&state);
+    tinysync_est_state_t_initialize(&state); // Set initialization counter to zero
 
-    test_moment_t now = {.t_1 = TEST_B12,
+    test_moment_t now = {.t_1 = TEST_B12, // Start off the clocks with an offset
                          .t_2 = 0};
     tinysync_datapoint_t d1;
 
@@ -75,25 +74,22 @@ int main(){
         uint64_t max_t_2 = (uint64_t)( (((double)now.t_1) - state.lineset.ba.b) / state.lineset.ba.a );
         uint64_t min_t_2 = (uint64_t)( (((double)now.t_1) - state.lineset.ab.b) / state.lineset.ab.a );
         printf("test %u %.9g %.9g %.9g %.9g %u %.9g %.9g %.9g %.9g %u %d %f %d %d %d\n",
-                                       ret, //D
+                                       ret, // Return code
                                        state.lineset.ba.a, // drift lower limit
                                        state.lineset.ab.a, // drift upper limit
                                        state.lineset.ba.b, // offset upper limit
                                        state.lineset.ab.b, // offset lower limit
-                                       
                                        now.t_2,
-
-                                       b_12_exp, //J
-                                       fabs(b_12_exp - TEST_A12), // A12 absolute error
-                                       a_12_exp,
-                                       fabs(a_12_exp - TEST_B12), // B12 absolute error
-                                       
+                                       b_12_exp, // Expected offset
+                                       fabs(b_12_exp - TEST_B12), // B12 absolute error
+                                       a_12_exp, // Expected skew
+                                       fabs(a_12_exp - TEST_A12), // A12 absolute error
                                        estimated_t_2,
-                                       estimated_t_2 - now.t_2, // 
-                                       fabs((int64_t)estimated_t_2 - (int64_t)now.t_2),
+                                       estimated_t_2 - now.t_2, // Error of t_2 estimate
+                                       fabs((int64_t)estimated_t_2 - (int64_t)now.t_2), // Absolute same
                                        max_t_2 - now.t_2, //Error of max; always positive if done right
                                        min_t_2 - now.t_2, //Error of min; always negative if done right
-                                       (max_t_2 - min_t_2) / 2  //Maximum possible absolute error;
+                                       (max_t_2 - min_t_2) / 2  //Maximum possible absolute error
                                        );
     }
     return 0;
