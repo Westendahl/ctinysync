@@ -53,7 +53,7 @@ tinysync_est_ret_t tinysync_est_etimate(tinysync_est_state_t * state, const tiny
         if        (a_3.t_1 < state->lineset.ba.b + state->lineset.ba.a * (double)(a_3.t_2)){
             // Lower constraint too low to be useful: do nothing
         } else if (a_3.t_1 > state->lineset.ab.b + state->lineset.ab.a * (double)(a_3.t_2)){
-            // Lower constraint too high to maintain linear model: remove old constraints and add new.
+            // Lower constraint too high to maintain linear model: remove old constraints, add new
             b_1 = state->constraints.b_2;
             a_1 = state->constraints.a_2;
             b_2 = b_3;
@@ -63,7 +63,7 @@ tinysync_est_ret_t tinysync_est_etimate(tinysync_est_state_t * state, const tiny
         } else {
             // Lower constraint useful: update a_2
             a_2 = a_3;
-            if ( (!tinysync_constraint_t_compare(state->constraints.b_1,state->constraints.b_2)) && (a_3.t_1 > state->lineset.aa.b + state->lineset.aa.a * (double)(a_3.t_2)) ){
+            if ( (!tinysync_constraint_t_compare(state->constraints.b_1,state->constraints.b_2)) && (a_3.t_1 > state->lineset.bb.b + state->lineset.bb.a * (double)(a_3.t_2)) ){
                 // b_2 is better than b_1 for this lower constraint: update b_1
                 b_1 = state->constraints.b_2;
             }
@@ -73,7 +73,7 @@ tinysync_est_ret_t tinysync_est_etimate(tinysync_est_state_t * state, const tiny
         if        (b_3.t_1 > state->lineset.ab.b + state->lineset.ab.a * (double)(b_3.t_2)){
             // Upper constraint too high to be useful: do nothing
         } else if (b_3.t_1 < state->lineset.ba.b + state->lineset.ba.a * (double)(b_3.t_2)){
-            // Upper constraint too low to maintain linear model: remove old constraints and add new.
+            // Upper constraint too low to maintain linear model: remove old constraints, add new
             b_1 = state->constraints.b_2;
             a_1 = state->constraints.a_2;
             b_2 = b_3;
@@ -83,7 +83,7 @@ tinysync_est_ret_t tinysync_est_etimate(tinysync_est_state_t * state, const tiny
         } else {
             // Upper constraint useful: update b_2
             b_2 = b_3;
-            if ( (!tinysync_constraint_t_compare(state->constraints.a_1,state->constraints.a_2)) && (b_3.t_1 < state->lineset.bb.b + state->lineset.bb.a * (double)(b_3.t_2)) ){
+            if ( (!tinysync_constraint_t_compare(state->constraints.a_1,state->constraints.a_2)) && (b_3.t_1 < state->lineset.aa.b + state->lineset.aa.a * (double)(b_3.t_2)) ){
                 // a_2 is better than a_1 for this upper constraint: update a_1
                 a_1 = state->constraints.a_2;
             }
@@ -97,10 +97,10 @@ tinysync_est_ret_t tinysync_est_etimate(tinysync_est_state_t * state, const tiny
     state->constraints.a_2 = a_2;
 
     // Update lines
-    calculate_line(b_1, b_2, &(state->lineset.aa));
+    calculate_line(b_1, b_2, &(state->lineset.bb));
     calculate_line(b_1, a_2, &(state->lineset.ba));
     calculate_line(a_1, b_2, &(state->lineset.ab));
-    calculate_line(a_1, a_2, &(state->lineset.bb));
+    calculate_line(a_1, a_2, &(state->lineset.aa));
 
     return ret;
 };
