@@ -63,15 +63,15 @@ int main(){
     test_moment_t now = {.t_1 = TEST_B12, // Start off the clocks with an offset
                          .t_2 = 0};
     tinysync_datapoint_t d1;
-    
+
     for(uint64_t i=0; i<TEST_N; i++){
         test_advance_timestamp(&d1, &now);
         tinysync_est_ret_t ret = tinysync_est_etimate(&state, &d1);
         double b_12_exp = (state.lineset.ba.a + state.lineset.ab.a) / 2.0;
         double a_12_exp = (state.lineset.ba.b + state.lineset.ab.b) / 2.0;
-        uint64_t estimated_t_2 = (uint64_t)( (((double)now.t_1) - a_12_exp) / b_12_exp );
-        uint64_t max_t_2 = (uint64_t)( (((double)now.t_1) - state.lineset.ba.b) / state.lineset.ba.a );
-        uint64_t min_t_2 = (uint64_t)( (((double)now.t_1) - state.lineset.ab.b) / state.lineset.ab.a );
+        uint64_t estimated_t_2 = (uint64_t)((((double)now.t_1) - a_12_exp) / b_12_exp);
+        uint64_t max_t_2 = (uint64_t)((((double)now.t_1) - state.lineset.ba.b) / state.lineset.ba.a);
+        uint64_t min_t_2 = (uint64_t)((((double)now.t_1) - state.lineset.ab.b) / state.lineset.ab.a);
         printf("test %u %.9g %.9g %.9g %.9g %u %.9g %.9g %.9g %.9g %u %d %f %d %d %d\n",
                 ret, // Return code
                 state.lineset.ba.a, // drift lower limit
