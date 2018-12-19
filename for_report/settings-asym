@@ -6,7 +6,7 @@
 #define TEST_INTERVAL 1*S // Test interval, t_2 units
 #define TEST_INTERVAL_RAND 100*MS // error magnitude
 #define TEST_DELAY_B 35*MS // delay from t_o to t_b
-#define TEST_DELAY_a_RAND 10*MS // error magnitude
+#define TEST_DELAY_B_RAND 10*MS // error magnitude
 #define TEST_DELAY_R 10*MS // delay from t_b to t_r
 #define TEST_DELAY_R_RAND 5*MS // error magnitude
 #define TEST_NONLINEAR_T_2_START 2000L*S // Time of nonlinearity event
